@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>Kardex Viewer</title>
+  <style type="text/css">
+  
+  #kardex_wrapper {
+    border: 1px solid #444;
+  }
+  
+  #kardex_main {
+    position: relative;
+    width: 1000px;
+    height: 700px;
+  }
+  
+  #kardex_corner {
+    background-color: #999;
+    color: #FFF;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 50px;
+    z-index: 4;
+  }
+  
+  /*
+   * 1. #kardex_corner.height
+   * 2. #kardex_corner.width
+   * 3. #kardex_main.width - #kardex_corner.width
+   */
+  #kardex_fixed_row {
+    background-color: #EEE;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    height: 50px; /* 1 */
+    padding-left: 200px; /* 2 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px; /* 3 */
+    z-index: 3;
+  }
+  
+  /*
+   * 1. #kardex_corner.height
+   * 2. #kardex_corner.width
+   * 3. #kardex_main.height - #kardex_corner.height
+   */
+  #kardex_fixed_column {
+    background-color: #AAA;
+    height: 650px;
+    padding-top: 50px; /* 1 */
+    width: 200px; /* 2 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  
+  /*
+   * 1. padding top = #kardex_corner.height, padding left = #kardex_corner.width
+   * 2. #kardex_fixed_row.width
+   * 3. #kardex_fixed_column.height
+   */
+  #kardex_body {
+    padding: 50px 0 0 200px; /* 1 */
+    width: 800px; /* 2 */
+    height: 650px; /* 3 */
+    z-index: 1;
+  }
+  </style>
+</head>
+<body>
+  
+  <div id="kardex_wrapper">
+    <div id="kardex_main">
+      <div id="kardex_corner">Corner</div>
+      <div id="kardex_fixed_row">
+        In aliquet porta fringilla. Cras nisl tellus, volutpat nec tempor id, porta interdum massa. Proin in condimentum nisl. Nunc urna eros, porttitor non eleifend molestie, sodales et odio.
+      </div>
+      <div id="kardex_fixed_column">
+        In aliquet porta fringilla. Cras nisl tellus, volutpat nec tempor id, porta interdum massa. Proin in condimentum nisl. Nunc urna eros, porttitor non eleifend molestie, sodales et odio.
+      </div>
+      <div id="kardex_body">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut adipiscing lacus id quam dictum eu adipiscing felis egestas. In hac habitasse platea dictumst. Curabitur consectetur tempor sapien, nec pharetra felis egestas non. Ut et tincidunt enim. Maecenas non feugiat felis. Curabitur vel enim eu arcu dictum egestas vel at est. Nullam a ligula id erat facilisis luctus. Pellentesque sapien risus, porta ut vulputate quis, tristique vel enim. Vivamus metus neque, condimentum eget eleifend ut, consequat et erat. Etiam convallis sem in urna porta tincidunt. Curabitur ut leo erat, eu laoreet dolor. Maecenas porttitor magna at elit rutrum pretium. Donec tincidunt tempor mi at posuere.
+        </p>
+        <p>
+          Pellentesque dictum, ligula et vehicula consequat, magna nibh dictum mi, porta ornare purus nulla vel dui. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris nec lacus magna. Cras risus nibh, pellentesque a accumsan at, pellentesque vel neque. In est tortor, vehicula ut aliquet sed, ultricies at enim. Ut eleifend suscipit sem vel aliquet. Nunc mauris nibh, dictum nec vulputate vitae, eleifend accumsan mauris. Maecenas porttitor faucibus ante. Ut quis ligula magna. Nullam justo felis, lacinia eu scelerisque at, eleifend ut velit. Duis vitae erat augue. Suspendisse a est et dui molestie scelerisque. Proin eleifend justo dui, a sodales neque. Nulla ipsum mi, eleifend a tristique sit amet, viverra eu sapien.
+        </p>
+        <p>
+          Quisque semper, magna id egestas consectetur, felis ante ornare ligula, id fermentum neque nulla vel arcu. Quisque sed orci libero, non commodo nisl. Vestibulum tincidunt lacus sed ipsum pharetra malesuada. Duis nec nulla ipsum, et faucibus augue. Nulla venenatis volutpat velit ut aliquam. Aliquam erat volutpat. Integer vulputate consequat tellus, nec placerat felis interdum quis. Nullam sed eros odio. Integer scelerisque urna ac mauris egestas fringilla. Sed ornare, nisi et aliquam iaculis, leo ipsum malesuada lectus, at vestibulum felis tortor at diam. Donec posuere ultrices venenatis. Nullam vel sem nec elit convallis venenatis. Sed nec diam sed tellus fermentum varius ac vitae dui. Donec quis mauris ac lacus blandit vulputate id vel lorem.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="jquery.mousewheel.js"></script>
+  <script type="text/javascript" src="jquery.sahib.panner.js"></script>
+  <script type="text/javascript">
+  $(document).on('ready', function(e)
+  {
+    var $Corner      = $('#kardex_corner');
+    var $FixedRow    = $('#kardex_fixed_row');
+    var $FixedColumn = $('#kardex_fixed_column');
+    
+    $('#kardex_wrapper').sahibpanner({
+      'width': 800,
+      'height': 400,
+      'axis': 'xy',
+      'pan_dispatcher': '#kardex_body',
+      onPan: function (new_x, new_y)
+      {
+        // Corner always on the same place
+        $Corner.css({
+          'top': Math.abs(new_y) + 'px',
+          'left': Math.abs(new_x) + 'px'
+        });
+        
+        // Lock #kardex_fixed_row to the top
+        $FixedRow.css('top', Math.abs(new_y) + 'px');
+        
+        // Lock #kardex_fixed_column to the left
+        $FixedColumn.css('left', Math.abs(new_x) + 'px');
+      }
+    });
+  });
+  </script>
+</body>
+</html>
